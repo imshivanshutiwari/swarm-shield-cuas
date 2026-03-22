@@ -87,9 +87,7 @@ class DigitalTwin:
             while len(attacker_obs_list) < self.attacker.n_agents:
                 attacker_obs_list.append(np.zeros(self.attacker.obs_dim, dtype=np.float32))
 
-            self.attacker.get_actions(
-                attacker_obs_list[: self.attacker.n_agents]
-            )
+            self.attacker.get_actions(attacker_obs_list[: self.attacker.n_agents])
             tactic_dist = self.attacker.get_tactic_distribution()
 
             # Commander assigns interceptors

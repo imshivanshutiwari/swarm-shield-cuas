@@ -56,7 +56,9 @@ def test_mappo_policy_loss_decreases(commander):
 
     # We don't strictly enforce loss decrease (untrained network can fluctuate),
     # but we ensure updates run without errors and losses are finite
-    assert all(np.isfinite(loss_val) for loss_val in losses), f"Some losses are not finite: {losses}"
+    assert all(
+        np.isfinite(loss_val) for loss_val in losses
+    ), f"Some losses are not finite: {losses}"
 
 
 def test_ctde_decentralized_execution():
