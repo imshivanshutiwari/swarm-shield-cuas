@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install lint tools
-        run: pip install black==24.4.2 flake8==7.0.0
+        run: pip install black==26.3.1 flake8==7.0.0
       - name: Black format check
         run: black --check . --line-length 100 --exclude="notebooks/"
       - name: Flake8 lint
