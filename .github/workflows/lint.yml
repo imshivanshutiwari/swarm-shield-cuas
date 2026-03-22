@@ -1,0 +1,18 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install lint tools
+        run: pip install black==24.4.2 flake8==7.0.0
+      - name: Black format check
+        run: black --check . --line-length 100 --exclude="notebooks/"
+      - name: Flake8 lint
+        run: flake8 . --max-line-length=100 --exclude=.git,__pycache__,notebooks

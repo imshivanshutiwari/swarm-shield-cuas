@@ -1,0 +1,25 @@
+grid_size: 500
+n_enemy_drones: 10
+drone_types:
+  kamikaze:
+    count: 5
+    speed: 40
+    health: 1.0
+  isr:
+    count: 3
+    speed: 15
+    health: 1.5
+  jammer:
+    count: 2
+    speed: 8
+    health: 2.0
+n_interceptors: 4
+max_timesteps: 300
+engagement_window_ms: 2000
+n_jammers: 2
+jammer_radius: 80
+jammer_power_dbm: 45
+gps_denial_zones: 2
+communication_radius: 150
+radar_range: 300
+eo_ir_range: 200
