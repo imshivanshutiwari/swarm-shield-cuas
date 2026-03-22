@@ -19,8 +19,13 @@ def save_checkpoint(
 
 
 def load_checkpoint(path: str, map_location: str = "cpu") -> Dict[str, Any]:
-    """Load a checkpoint from disk."""
-    return torch.load(path, map_location=map_location)
+    """Load a checkpoint from disk.
+
+    weights_only=False is required because checkpoints contain numpy arrays inside
+    the metrics dict saved by CheckpointCallback. Only load checkpoints produced by
+    this project's own training pipeline.
+    """
+    return torch.load(path, map_location=map_location, weights_only=False)  # nosec
 
 
 def save_model(model: torch.nn.Module, path: str) -> None:
@@ -31,7 +36,7 @@ def save_model(model: torch.nn.Module, path: str) -> None:
 
 def load_model(model: torch.nn.Module, path: str, map_location: str = "cpu") -> torch.nn.Module:
     """Load model state dict into a model instance."""
-    state_dict = torch.load(path, map_location=map_location)
+    state_dict = torch.load(path, map_location=map_location, weights_only=True)
     model.load_state_dict(state_dict)
     return model
 

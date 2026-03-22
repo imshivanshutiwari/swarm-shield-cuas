@@ -211,7 +211,7 @@ class CommanderAgent:
 
     def load(self, path: str) -> None:
         """Load actor and critic state dicts."""
-        ckpt = torch.load(path, map_location="cpu")
+        ckpt = torch.load(path, map_location="cpu", weights_only=True)
         self.actor.load_state_dict(ckpt["actor"])
         self.critic.load_state_dict(ckpt["critic"])
 

@@ -247,7 +247,7 @@ class DigitalTwin:
         """Load training checkpoint."""
         import torch
 
-        ckpt = torch.load(path, map_location="cpu")
+        ckpt = torch.load(path, map_location="cpu", weights_only=True)
         self.attacker.q_network.load_state_dict(ckpt["attacker_q_network"])
         self.attacker.mixing_network.load_state_dict(ckpt["attacker_mixing_network"])
 

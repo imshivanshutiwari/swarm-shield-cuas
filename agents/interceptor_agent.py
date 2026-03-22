@@ -181,7 +181,7 @@ class InterceptorAgent:
 
     def load(self, path: str) -> None:
         """Load agent state."""
-        ckpt = torch.load(path, map_location="cpu")
+        ckpt = torch.load(path, map_location="cpu", weights_only=True)
         self.actor.load_state_dict(ckpt["actor"])
         self.critic.load_state_dict(ckpt["critic"])
         self.target_actor.load_state_dict(ckpt["target_actor"])
