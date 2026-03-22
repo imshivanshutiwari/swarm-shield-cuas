@@ -1,0 +1,9 @@
+cfar_type: CA-CFAR
+pfa_target: 1.0e-4
+guard_cells: 2
+training_cells: 8
+rf_stft_window: 512
+rf_hop_length: 128
+rf_n_mels: 64
+fusion_method: attention_weighted
+sensor_dropout_prob: 0.3

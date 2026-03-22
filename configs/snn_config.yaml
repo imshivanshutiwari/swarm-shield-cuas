@@ -1,0 +1,12 @@
+n_timesteps: 8
+hidden_sizes:
+  - 256
+  - 128
+  - 64
+tau_mem: 2.0
+tau_syn: 1.0
+threshold: 1.0
+surrogate_grad: atan
+reset_mode: soft
+target_sparsity: 0.85
+encoding: rate

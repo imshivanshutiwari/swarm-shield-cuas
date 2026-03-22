@@ -1,0 +1,15 @@
+commander_algo: MAPPO
+interceptor_algo: MADDPG
+attacker_algo: QMIX
+lr_actor: 3.0e-4
+lr_critic: 1.0e-3
+gamma: 0.99
+gae_lambda: 0.95
+clip_epsilon: 0.2
+entropy_coef: 0.01
+n_epochs: 10
+batch_size: 256
+rollout_steps: 2048
+total_timesteps: 3000000
+max_grad_norm: 0.5
+target_update_tau: 0.01
