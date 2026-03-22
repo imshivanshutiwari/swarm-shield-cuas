@@ -3,7 +3,7 @@ torchvision==0.21.0
 torch-geometric==2.5.3
 spikingjelly==0.0.0.0.14
 gymnasium==0.28.1
-wandb==0.16.6
+wandb==0.18.0
 numpy==1.26.4
 matplotlib==3.8.4
 networkx==3.3
