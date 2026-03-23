@@ -3,6 +3,9 @@ Main trainer orchestrating multi-agent training.
 Handles rollout collection, agent updates, and metric logging.
 """
 
+import os
+import re
+import glob
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
@@ -93,6 +96,48 @@ class MARLTrainer:
         self.global_step: int = 0
         self.episode: int = 0
         self._episode_rewards: List[float] = []
+
+        if self.config.get("resume"):
+            self._resume_from_checkpoint()
+
+    def _resume_from_checkpoint(self) -> None:
+        """Find and load the latest checkpoint from the checkpoint directory."""
+        log.info(f"Resuming from checkpoint in {self.checkpoint_dir}...")
+        
+        # Look for ckpt_epXXXXXX.pt in any agent subfolder
+        # Since they are saved together, finding the latest in 'commander' is enough
+        search_path = os.path.join(self.checkpoint_dir, "commander", "ckpt_ep*.pt")
+        ckpt_files = glob.glob(search_path)
+        
+        if not ckpt_files:
+            log.warning("No checkpoints found to resume from. Starting from scratch.")
+            return
+
+        # Extract episode numbers and find the latest
+        episodes = []
+        for f in ckpt_files:
+            match = re.search(r"ckpt_ep(\d+)\.pt", f)
+            if match:
+                episodes.append(int(match.group(1)))
+        
+        if not episodes:
+            log.warning("Could not parse episode numbers. Starting from scratch.")
+            return
+
+        latest_ep = max(episodes)
+        log.info(f"Latest checkpoint found: episode {latest_ep}")
+
+        # Load for all agents
+        try:
+            self.commander.load(os.path.join(self.checkpoint_dir, "commander", f"ckpt_ep{latest_ep:06d}.pt"))
+            self.interceptors.load(os.path.join(self.checkpoint_dir, "interceptors", f"ckpt_ep{latest_ep:06d}.pt"))
+            self.attacker.load(os.path.join(self.checkpoint_dir, "attacker", f"ckpt_ep{latest_ep:06d}.pt"))
+            
+            self.episode = latest_ep
+            self.global_step = latest_ep * self.rollout_steps
+            log.info(f"Successfully resumed from episode {latest_ep} (step {self.global_step})")
+        except Exception as e:
+            log.error(f"Failed to load checkpoints: {e}. Starting from scratch.")
 
     def _init_env(self, env_config: Optional[Dict] = None) -> None:
         """Initialize or re-initialize the environment."""

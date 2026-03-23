@@ -45,6 +45,11 @@ def parse_args() -> argparse.Namespace:
         default="checkpoints",
         help="Checkpoint directory",
     )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume training from the latest checkpoint in checkpoint-dir",
+    )
     return parser.parse_args()
 
 
@@ -93,6 +98,7 @@ def main() -> None:
         **configs,
         "use_wandb": use_wandb,
         "checkpoint_dir": args.checkpoint_dir,
+        "resume": args.resume,
     }
     trainer = MARLTrainer(config=trainer_config)
 

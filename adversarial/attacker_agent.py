@@ -1,3 +1,4 @@
+import os
 import copy
 from typing import Any, Dict, List, Optional
 
@@ -201,6 +202,35 @@ class QMIXAttacker:
             self._tactic_probs = {t: 1.0 / len(TACTICS) for t in TACTICS}
             # Increase exploration temporarily
             self._tactic_history = []
+
+    def save(self, path: str) -> None:
+        """Save agent state."""
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        torch.save(
+            {
+                "q_network": self.q_network.state_dict(),
+                "mixing_network": self.mixing_network.state_dict(),
+                "target_q_network": self.target_q_network.state_dict(),
+                "target_mixing_network": self.target_mixing_network.state_dict(),
+            },
+            path,
+        )
+
+    def load(self, path: str) -> None:
+        """Load agent state."""
+        ckpt = torch.load(path, map_location="cpu", weights_only=True)
+        self.q_network.load_state_dict(ckpt["q_network"])
+        self.mixing_network.load_state_dict(ckpt["mixing_network"])
+        
+        if "target_q_network" in ckpt:
+            self.target_q_network.load_state_dict(ckpt["target_q_network"])
+        else:
+            self.target_q_network.load_state_dict(self.q_network.state_dict())
+            
+        if "target_mixing_network" in ckpt:
+            self.target_mixing_network.load_state_dict(ckpt["target_mixing_network"])
+        else:
+            self.target_mixing_network.load_state_dict(self.mixing_network.state_dict())
 
     def get_tactic_distribution(self) -> Dict[str, float]:
         """Return probability distribution over tactics from recent history."""

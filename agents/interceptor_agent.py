@@ -184,8 +184,16 @@ class InterceptorAgent:
         ckpt = torch.load(path, map_location="cpu", weights_only=True)
         self.actor.load_state_dict(ckpt["actor"])
         self.critic.load_state_dict(ckpt["critic"])
-        self.target_actor.load_state_dict(ckpt["target_actor"])
-        self.target_critic.load_state_dict(ckpt["target_critic"])
+        
+        if "target_actor" in ckpt:
+            self.target_actor.load_state_dict(ckpt["target_actor"])
+        else:
+            self.target_actor.load_state_dict(self.actor.state_dict())
+            
+        if "target_critic" in ckpt:
+            self.target_critic.load_state_dict(ckpt["target_critic"])
+        else:
+            self.target_critic.load_state_dict(self.critic.state_dict())
 
 
 if __name__ == "__main__":
